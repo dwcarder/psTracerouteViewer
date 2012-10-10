@@ -291,6 +291,11 @@ sub DeduplicateTracerouteDataAnswer($$;$) {
 		# or, let's compare topologies
 		} else {
 
+			#print "current: -------------\n";
+			#print Dumper(\%current_topology);
+			#print "last: -------------\n";
+			#print Dumper(\%last_topology);
+
 		   TOPOCOMPARE1:
 		   foreach my $hop (keys(%last_topology)) {
 
@@ -298,6 +303,7 @@ sub DeduplicateTracerouteDataAnswer($$;$) {
 			foreach my $rtr ( keys(%{$last_topology{$hop}}) ) {
 				if (! defined($current_topology{$hop}{$rtr})) {
 					$topologychange=1;
+					#print "topo change1 at $current_timestamp for $rtr\n";
 					last TOPOCOMPARE1;
 				}
 			}
@@ -310,6 +316,7 @@ sub DeduplicateTracerouteDataAnswer($$;$) {
 			foreach my $rtr ( keys(%{$current_topology{$hop}}) ) {
 				if (! defined($last_topology{$hop}{$rtr})) {
 					$topologychange=1;
+					#print "topo change2 at $current_timestamp for $rtr\n";
 					last TOPOCOMPARE2;
 				}
 			}
@@ -321,6 +328,7 @@ sub DeduplicateTracerouteDataAnswer($$;$) {
 			#print "topology change at $current_timestamp\n";
 			# save this topology at this timestamp
 			$$topology{$current_timestamp} = \%current_topology;
+			%last_topology = %current_topology;
 		}
 
 		# save the timestamp
