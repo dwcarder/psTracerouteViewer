@@ -21,8 +21,8 @@
 #
 #======================================================================
 
-#TODO select timezone
-#TODO select measurement archive from a list
+#TODO select measurement archive from a list.
+#TODO time each operation and present it at the bottom.
 
 
 #======================================================================
@@ -30,9 +30,7 @@
 #
 
 my $Script = 'index.cgi';
-my $URLPath = "/toolkit/gui/services/psTracerouteViewer";
 my $Default_mahost = 'localhost:8086/perfSONAR_PS/services/tracerouteMA';
-my $Ver = 'psTracerouteViewer $Id: index.cgi,v 1.2 2012/10/03 23:20:34 dwcarder Exp $';
 
 #
 #======================================================================
@@ -49,6 +47,8 @@ use Socket;
 use Socket6;
 use Data::Validate::IP qw(is_ipv4 is_ipv6);
 use Data::Dumper;
+use DateTime::TimeZone;
+use POSIX qw(tzset);
 
 #
 #======================================================================
@@ -62,6 +62,7 @@ sub lookup($;$);
 sub displayTrData();
 sub displayTop();
 sub displaySelectBox();
+sub utcOffset($);
 
 #
 #======================================================================
@@ -111,7 +112,8 @@ if ( scalar(keys((%endpoint))) < 1 ) {
 	}
 }
 
-print "<br><br><hr>$Ver<br>\n";
+#print "<br><br><hr>$Ver<br>\n";
+print "<br><br>";
 
 exit();
 
@@ -186,6 +188,19 @@ sub parseInput() {
                 $donotdedup = 0;
         }
 
+	# timezone support
+	my $tz = DateTime::TimeZone->new(name=>'local');
+	$ENV{TZ} = $tz->name;
+	if (defined(param('tzselect'))) {
+		if (param('tzselect') =~ m/^[0-9a-zA-Z:\/_\-]+$/ ) {
+			#my $zone = param('tzselect');
+			#my $tz = DateTime::TimeZone->new(name=>$zone);
+			#$ENV{TZ} = $tz->name;
+			$ENV{TZ} = param('tzselect');
+		}
+	} 
+	tzset;
+
 }
 
 
@@ -240,7 +255,7 @@ sub displayTrData() {
 
       foreach my $time (sort keys %topology) {
               my $humantime = scalar(localtime($time));
-              print "<h3>Topology beginning at $humantime</h3><blockquote>\n";
+              print "<h3>Topology beginning at $humantime (" . utcOffset($ENV{'TZ'}) .")</h3><blockquote>\n";
               print "<table border=1 cellspacing=0 cellpadding=3>\n";
               print "<tr><th>Hop</th><th>Router</th><th>IP</th></tr>\n";
               foreach my $hopnum (sort keys %{$topology{$time}} ) {
@@ -313,7 +328,7 @@ EOM
 
    my $html2=<<EOM;
    </select><br>
-   <input type="checkbox" name="donotdedup" value="1" $dedupsel>Do not filter/de-duplicate results &nbsp;
+   <input type="checkbox" name="donotdedup" value="1" $dedupsel>Do not de-duplicate results &nbsp;
    <input type="submit" value="Submit query">
    </form>
 
@@ -332,14 +347,17 @@ sub displayTop() {
       <html>
       <head>
        <title>psTracerouteViewer</title>
-       <style type="text/css">\@import url($URLPath/jscalendar/calendar-win2k-1.css);</style>
-       <script type="text/javascript" src="$URLPath/jscalendar/calendar.js"></script>
-       <script type="text/javascript" src="$URLPath/jscalendar/lang/calendar-en.js"></script>
-       <script type="text/javascript" src="$URLPath/jscalendar/calendar-setup.js"></script>
+       <style type="text/css">\@import url(jscalendar/calendar-win2k-1.css);</style>
+       <script type="text/javascript" src="jscalendar/calendar.js"></script>
+       <script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>
+       <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
       </head>
 
       <h2>psTracerouteViewer</h2>
 
+    <table border=0 width="100%">
+    <tr>
+    <td valign="top">
       <form name="query1" method="get" action="$Script">
       Measurement Archive: <input type="text" name="mahost" value="$mahost" size="$ma_size"> <br>
 
@@ -369,13 +387,55 @@ sub displayTop() {
       </script>
       <br>
 
-      <input type="submit" value="Query MA">
-
-      <br><br>
-      <hr>
 EOM
       print $html1;
 
+	# timezone support
+	#print "tz=" . $ENV{TZ} . "<br>\n";
+	print "Timezone: <select name=\"tzselect\">\n";
+	foreach my $tz (DateTime::TimeZone->all_names) {
+		my $tz_selected = " ";
+		if ($tz eq $ENV{'TZ'}) { $tz_selected = "selected=\"selected\""; }
+
+
+		print "<option $tz_selected value=\"$tz\">$tz &nbsp; (" . utcOffset($tz) . ")</option>\n";
+	}
+
+	print "</select>\n";
+
+ 	my $html11=<<EOM;
+	<input type="submit" value="Query MA">
+	</td><td valign="top">
+	<center>
+	<a href="http://www.wisc.edu" border=0><img src="uwm.gif"></a><br>
+	<br>
+	Maintained by <a href="http://net.doit.wisc.edu/~dwcarder">Dale W. Carder</a><br>
+	Get the <a href=\"https://github.com/dwcarder/psTracerouteViewer\">source!
+	</center>
+	</td></tr></table>
+
+	<br><hr>
+
+EOM
+	print $html11;
+
 } #end displayTop();
 
+
+sub utcOffset($) { 
+
+	my $tz = shift;
+
+	# figure out the offset from gmt
+	my $t = DateTime::TimeZone->new(name => $tz);
+	my $now = DateTime->now;
+	my $offset = $t->offset_for_datetime($now);
+	$offset = $offset / 60 / 60;
+	if ($offset > 0) { $offset = "UTC +" . $offset; } 
+	elsif ($offset == 0) { $offset = "UTC"; } 
+	else { $offset = "UTC $offset"; }
+
+	return($offset);
+
+} # end utcOffset
 
