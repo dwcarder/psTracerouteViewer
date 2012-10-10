@@ -303,8 +303,8 @@ sub DeduplicateTracerouteDataAnswer($$;$) {
 			}
 		   }
 
-		   TOPOCOMPARE2:
 		   if ($topologychange eq 0) {
+		   TOPOCOMPARE2:
 		     foreach my $hop (keys(%current_topology)) {
 			# see if the new toplology has something the old one doen't have
 			foreach my $rtr ( keys(%{$current_topology{$hop}}) ) {
