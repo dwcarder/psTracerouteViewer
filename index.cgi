@@ -127,7 +127,7 @@ sub parseInput() {
 
         # measurement archive url
         if (defined(param("mahost"))) {
-                if (param("mahost") =~ m/^[0-9a-zA-Z\/:_]+$/) {
+                if (param("mahost") =~ m/^[0-9a-zA-Z\/:_\.]+$/) {
                          $mahost = param("mahost");
                 } else { 
                         die("Illegal characters in measurement archive host url.");
@@ -258,7 +258,7 @@ sub displayTrData() {
               print "<h3>Topology beginning at $humantime (" . utcOffset($ENV{'TZ'}) .")</h3><blockquote>\n";
               print "<table border=1 cellspacing=0 cellpadding=3>\n";
               print "<tr><th>Hop</th><th>Router</th><th>IP</th></tr>\n";
-              foreach my $hopnum (sort keys %{$topology{$time}} ) {
+              foreach my $hopnum (sort { $a <=> $b } keys %{$topology{$time}} ) {
                       my $sayecmp=" ";
                       foreach my $router (keys %{$topology{$time}{$hopnum}}) {
                               # detect if this hop has more than router
@@ -346,6 +346,7 @@ sub displayTop() {
       my $html1 =<<EOM;
       <html>
       <head>
+       <META NAME="robots" CONTENT="noindex,nofollow">
        <title>psTracerouteViewer</title>
        <style type="text/css">\@import url(jscalendar/calendar-win2k-1.css);</style>
        <script type="text/javascript" src="jscalendar/calendar.js"></script>
