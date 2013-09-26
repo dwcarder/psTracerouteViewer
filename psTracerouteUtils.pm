@@ -60,7 +60,8 @@ our $VERSION = 1.0;
 
 #=====================================================
 #    P R O T O T Y P E S
-#=====================================================
+#t=====================================================
+sub TrTimestamp($);
 sub GetTracerouteMetadataFromMA($$$);
 sub ParseTracerouteMetadataAnswer($$);
 sub GetTracerouteDataFromMA($$$$);
