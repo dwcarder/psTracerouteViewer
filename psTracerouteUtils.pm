@@ -2,7 +2,6 @@
 #======================================================================
 #
 #       psTracerouteUtils.pm
-#       $Id: psTracerouteUtils.pm,v 1.3 2012/10/03 23:20:58 dwcarder Exp $
 #
 #       Helper Utilities for viewing traceroute data stored in PerfSonar.
 #
@@ -221,6 +220,24 @@ sub GetTracerouteDataFromMA($$$$) {
 }
 
 
+#===============================================================================
+#                       TrTimestamp
+#
+#	A helper utility for sorting traceroute data
+#
+#  Arguments:
+#     arg[0]: scalar containing xml to parse for a timeValue timestamp in
+#             the traceroute response.
+#
+#  Returns: 
+#     the timestamp found. 
+#
+#
+sub TrTimestamp($) {
+	my $val = shift;
+	$val =~ m/timeValue="(\d+)"/;
+	return $1;
+}
 
 
 #===============================================================================
@@ -246,8 +263,10 @@ sub DeduplicateTracerouteDataAnswer($$;$) {
 	my %last_topology;
 	my $last_timestamp=0;
 
-	# each row is a timestamp
-        foreach my $xmlrow (@{$xmlresult->{"data"}}) {
+	#print Dumper($xmlresult->{"data"});
+
+	# each row is a timestamp, and we need to work them in order
+        foreach my $xmlrow (sort {TrTimestamp($a) cmp TrTimestamp($b) } @{$xmlresult->{"data"}}) {
 
 		my %current_topology;
 		my $current_timestamp=0;
@@ -261,17 +280,16 @@ sub DeduplicateTracerouteDataAnswer($$;$) {
   		);
 
 		#print Dumper($parsed_xml);
-		my @arr = $$parsed_xml{'traceroute:datum'};
-
+		#my @arr = $$parsed_xml{'traceroute:datum'};
 		#print Dumper(@arr);
 
-		#foreach my $hashref ( @{$arr[0]} ) {
-		#foreach my $hashref ( @arr ) {
 		foreach my $hashref ( @{$$parsed_xml{'traceroute:datum'}} ) {
 			#print "\n\nROW\n";
 			#print Dumper($hashref);
 
 			if ($$hashref{'timeValue'} < $last_timestamp) {
+				# We now sort the values, so we really should not 
+				# have this problem unless the sort fails.
 				die ("Times from XML response are out of order");
 			} else {
 				# update timestamp
