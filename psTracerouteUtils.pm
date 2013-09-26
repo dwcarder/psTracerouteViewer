@@ -156,6 +156,11 @@ sub ParseTracerouteMetadataAnswer($$) {
 		# strip off "meta.".  I have no idea why it is there.
 		$id =~ s/meta\.//;
 
+		# make sure we have a src and dst
+		if(!$twig->first_elt('nmwgt:src') || !$twig->first_elt('nmwgt:dst')){
+			next;
+		}
+
 		# sometime there is a bogus row where the source is the destination.  not useful.
 		if ($twig->first_elt('nmwgt:src')->{'att'}->{'value'} eq $twig->first_elt('nmwgt:dst')->{'att'}->{'value'}) {
 			next;

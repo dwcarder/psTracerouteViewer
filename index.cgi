@@ -30,7 +30,8 @@
 #
 
 my $Script = 'index.cgi';
-my $Default_mahost = 'localhost:8086/perfSONAR_PS/services/tracerouteMA';
+my $Default_mahost = 'http://localhost:8086/perfSONAR_PS/services/tracerouteMA';
+
 
 #
 #======================================================================
@@ -127,7 +128,7 @@ sub parseInput() {
 
         # measurement archive url
         if (defined(param("mahost"))) {
-                if (param("mahost") =~ m/^[0-9a-zA-Z\/:_\.]+$/) {
+                if (param("mahost") =~ m/^[0-9a-zA-Z\/:_\.\-]+$/) {
                          $mahost = param("mahost");
                 } else { 
                         die("Illegal characters in measurement archive host url.");
@@ -296,10 +297,10 @@ EOM
               $srchost = lookup($endpoint{$id}{'srcval'}) . ' ('. $endpoint{$id}{'srcval'} . ')' ;
 
       } else { # we have a hostname, but want the ip
-              if ($endpoint{$id}{'dsttype'} eq 'ipv4') {
-                      $srchost = $endpoint{$id}{'srcval'} . ' ('. lookup($endpoint{$id}{'srcval'},AF_INET) .') ';
-              } elsif ($endpoint{$id}{'dsttype'} eq 'ipv6') {
+              if ($endpoint{$id}{'dsttype'} eq 'ipv6') {
                       $srchost = $endpoint{$id}{'srcval'} . ' ('. lookup($endpoint{$id}{'srcval'},AF_INET6) .') ';
+              }else{
+                      $srchost = $endpoint{$id}{'srcval'} . ' ('. lookup($endpoint{$id}{'srcval'},AF_INET) .') ';
               }
       }
 
@@ -307,11 +308,11 @@ EOM
               $dsthost = lookup($endpoint{$id}{'dstval'}) . ' ('. $endpoint{$id}{'dstval'} . ')' ;
 
       } else { # we have a hostname, but want the ip, try to guess v4 or v6
-                if ($endpoint{$id}{'srctype'} eq 'ipv4') {
-                        $dsthost = $endpoint{$id}{'dstval'} . ' ('. lookup($endpoint{$id}{'dstval'},AF_INET) .') ';
-                } elsif ($endpoint{$id}{'srctype'} eq 'ipv6') {
-                        $dsthost = $endpoint{$id}{'dstval'} . ' ('. lookup($endpoint{$id}{'dstval'},AF_INET6) .') ';
-                }
+          if ($endpoint{$id}{'srctype'} eq 'ipv6') {
+              $dsthost = $endpoint{$id}{'dstval'} . ' ('. lookup($endpoint{$id}{'dstval'},AF_INET6) .') ';
+          } else{
+              $dsthost = $endpoint{$id}{'dstval'} . ' ('. lookup($endpoint{$id}{'dstval'},AF_INET) .') ';
+          } 
       }
 
       # determine if something was already selected or not.
