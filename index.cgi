@@ -217,7 +217,11 @@ sub lookup($;$) {
         my $af = shift;
         my $r;
 
-        if (defined($dnscache{$thing})) {
+        if (defined($af)) {
+           if (defined($dnscache{$af}{$thing})) {
+               return $dnscache{$af}{$thing};
+           }
+        } elsif (defined($dnscache{$thing})) {
                 return $dnscache{$thing};
         }
 
@@ -236,8 +240,12 @@ sub lookup($;$) {
         }
 
         if (defined($r)) { 
+			if (defined($af)) {
+				$dnscache{$af}{$thing} = $r;
+			} else {
                 $dnscache{$thing} = $r;
-                return $r;      
+			}
+            return $r;      
         } else {
                 return " ";
         }
