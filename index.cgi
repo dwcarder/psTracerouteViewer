@@ -190,13 +190,18 @@ sub parseInput() {
         }
 
 	# timezone support
-	my $tz = DateTime::TimeZone->new(name=>'local');
-	$ENV{TZ} = $tz->name;
+	my $tz;
+	# It turns out that DateTime::TimeZone can die() if it can't
+	# figure out the timezone.  Instead, catch that and set a default.
+	# http://code.google.com/p/perfsonar-ps/issues/detail?id=819
+	eval { $tz = DateTime::TimeZone->new(name=>'local'); };
+	if ( $@ ) {
+		$ENV{TZ} = "America/Chicago";
+	} else {	
+		$ENV{TZ} = $tz->name;
+	}
 	if (defined(param('tzselect'))) {
 		if (param('tzselect') =~ m/^[0-9a-zA-Z:\/_\-]+$/ ) {
-			#my $zone = param('tzselect');
-			#my $tz = DateTime::TimeZone->new(name=>$zone);
-			#$ENV{TZ} = $tz->name;
 			$ENV{TZ} = param('tzselect');
 		}
 	} 
