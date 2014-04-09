@@ -267,7 +267,6 @@ sub DeduplicateTracerouteDataAnswer($$;$) {
 	}
 
 	my %last_topology;
-	my $last_timestamp=0;
 
 	#print Dumper($xmlresult->{"data"});
 
@@ -293,15 +292,7 @@ sub DeduplicateTracerouteDataAnswer($$;$) {
 			#print "\n\nROW\n";
 			#print Dumper($hashref);
 
-			if ($$hashref{'timeValue'} < $last_timestamp) {
-				# We now sort the values, so we really should not 
-				# have this problem unless the sort fails.
-				die ("Times from XML response are out of order");
-			} else {
-				# update timestamp
-				$current_timestamp = $$hashref{'timeValue'};
-			}
-
+			$current_timestamp = $$hashref{'timeValue'};
 			$current_topology{$$hashref{'ttl'}}{$$hashref{'hop'}} = 1;
 		}
 
@@ -354,9 +345,6 @@ sub DeduplicateTracerouteDataAnswer($$;$) {
 			$$topology{$current_timestamp} = \%current_topology;
 			%last_topology = %current_topology;
 		}
-
-		# save the timestamp
-		$last_timestamp = $current_timestamp;
 	
 	} # end for each timestamp row
 
