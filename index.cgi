@@ -312,7 +312,11 @@ EOM
       } else { # we have a hostname, but want the ip
               if ($endpoint{$id}{'dsttype'} eq 'ipv6') {
                       $srchost = $endpoint{$id}{'srcval'} . ' ('. lookup($endpoint{$id}{'srcval'},AF_INET6) .') ';
-              }else{
+
+			  # so, now we have to guess if this is a v4 or v6 host.  prefer v6 like a typical host.
+              } elsif (lookup($endpoint{$id}{'srcval'},AF_INET6) ne ' ' && lookup($endpoint{$id}{'dstval'},AF_INET6) ne ' ') {
+                      $srchost = $endpoint{$id}{'srcval'} . ' ('. lookup($endpoint{$id}{'srcval'},AF_INET6) .') ';
+			  } else {
                       $srchost = $endpoint{$id}{'srcval'} . ' ('. lookup($endpoint{$id}{'srcval'},AF_INET) .') ';
               }
       }
@@ -320,8 +324,12 @@ EOM
       if ($endpoint{$id}{'dsttype'} =~ m/ipv[46]/ ) {
               $dsthost = lookup($endpoint{$id}{'dstval'}) . ' ('. $endpoint{$id}{'dstval'} . ')' ;
 
-      } else { # we have a hostname, but want the ip, try to guess v4 or v6
+      } else { # we have a hostname, but want the ip
           if ($endpoint{$id}{'srctype'} eq 'ipv6') {
+              $dsthost = $endpoint{$id}{'dstval'} . ' ('. lookup($endpoint{$id}{'dstval'},AF_INET6) .') ';
+
+		  # so, now we have to guess if this is a v4 or v6 host.  prefer v6 like a typical host.
+		  } elsif (lookup($endpoint{$id}{'dstval'},AF_INET6) ne ' ' && lookup($endpoint{$id}{'srcval'},AF_INET6) ne ' ') {
               $dsthost = $endpoint{$id}{'dstval'} . ' ('. lookup($endpoint{$id}{'dstval'},AF_INET6) .') ';
           } else{
               $dsthost = $endpoint{$id}{'dstval'} . ' ('. lookup($endpoint{$id}{'dstval'},AF_INET) .') ';
