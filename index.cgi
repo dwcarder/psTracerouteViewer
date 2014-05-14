@@ -303,7 +303,6 @@ sub displayTrData() {
    
 } # end displayTrData()
 
-
 sub displaySelectBox() {
 
    my $html3=<<EOM;
@@ -313,6 +312,7 @@ sub displaySelectBox() {
 EOM
    print $html3;
 
+   my %options;
 
    foreach my $id (keys %endpoint) {
 
@@ -345,8 +345,12 @@ EOM
       # determine if something was already selected or not.
       my $selected=" ";
       if ($id eq $epselect) { $selected="selected=\"selected\""; }
-      print "<option value=\"$id\" $selected > $srchost ---->  $dsthost \n";
+	  $options{"$srchost ---->  $dsthost"} = "<option value=\"$id\" $selected >";
    }
+
+	foreach my $srcdst (sort keys(%options)) {
+		print $options{$srcdst} . $srcdst . "\n" ;
+	}
 
    # see if the checkbox should be selected
    my $dedupsel = " ";
