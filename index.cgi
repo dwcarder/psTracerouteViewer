@@ -38,7 +38,7 @@ my $Default_mahost = 'http://localhost:8086/perfSONAR_PS/services/tracerouteMA';
 #======================================================================
 #       U S E   A N D   R E Q U I R E
 
-use lib "/opt/perfsonar_ps/toolkit/web/root/gui/services/psTracerouteViewer";
+use lib '/opt/perfsonar_ps/traceroute_ma/lib';
 use strict;
 use psTracerouteUtils;
 use CGI qw(:standard);
