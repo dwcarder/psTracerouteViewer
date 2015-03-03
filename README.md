@@ -1,5 +1,5 @@
 
-psTracerouteViewer 
+psTracerouteViewer v2
 
 A library and cgi for viewing traceroute data stored in PerfSonar.
 
@@ -10,7 +10,7 @@ University of Wisconsin at Madison
 
 Inspired in large part by traceroute_improved.cgi by Yuan Cao <caoyuan@umich.edu>
 
-Copyright 2012 The University of Wisconsin Board of Regents
+Copyright 2014 The University of Wisconsin Board of Regents
 Licensed and distributed under the terms of the Artistic License 2.0
 
 See the file LICENSE for details or reference the URL:
