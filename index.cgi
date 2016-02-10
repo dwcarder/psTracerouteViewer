@@ -31,7 +31,7 @@
 #
 
 my $Script = 'index.cgi';
-my $Default_mahost = 'http://localhost:8086/perfSONAR_PS/services/tracerouteMA';
+my $Default_mahost = 'http://localhost/esmond/perfsonar/archive/';
 
 
 #
