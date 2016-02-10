@@ -31,21 +31,9 @@ use warnings;
 use strict;
 use lib '/usr/lib/perfsonar/lib';
 use Exporter;                           # easy perl module functions
-use XML::Twig;
-use XML::Simple qw(:strict);
 use Data::Dumper;
 use Data::Validate::IP qw(is_ipv4 is_ipv6);
 use perfSONAR_PS::Client::Esmond::ApiConnect;
-
-#======================================================================
-#    B E G I N   C O N F I G U R A T I O N   S E C T I O N
-
-# 'XML::SAX::ExpatXS is technically optional, but performance will tank without it.
-# Do this: sudo yum install expat-devel; sudo cpan -i XML::SAX::ExpatXS
-local $ENV{XML_SIMPLE_PREFERRED_PARSER} = 'XML::SAX::ExpatXS';
-
-#      E N D   C O N F I G U R A T I O N   S E C T I O N
-#======================================================================
 
 
 #=====================================================
@@ -63,7 +51,6 @@ our $VERSION = 2.0;		# 2.0 adds esmond support
 sub GetTracerouteData($$$$$);
 sub GetTracerouteMetadata($$$$);
 sub GetTracerouteMetadataFromESmond($$$$);
-sub ParseTracerouteMetadataAnswer($$);
 sub GetTracerouteDataFromEsmond($$$$$);
 sub DeduplicateTracerouteData($$);
 
@@ -182,60 +169,6 @@ sub GetTracerouteMetadataFromESmond($$$$) {
 } # end GetTracerouteMetadataFromEsmond
 
 
-#===============================================================================
-#                       ParseTracerouteMetadataAnswer
-#
-#	Parses the xml results from the metadata query and builds
-#	a hash of hash datastrcuture summarizing the results, indexed
-#	by metadata key.
-#
-#  Arguments:
-#     arg[0]: a hash of arrays containing the xml metadata responses
-#     arg[1]: a hash reference to fill with endpoint information
-#
-#  Returns: 
-#
-#
-sub ParseTracerouteMetadataAnswer($$) {
-
-	my $xmlresult = shift;
-	my $endpoint = shift;
-
-	# each row is a set of source-dest traceroute pairs
-        foreach my $xmlrow (@{$xmlresult->{"metadata"}}) {
-
-		# parse xml
-        	my $twig = XML::Twig->new(pretty_print => 'indented');
-		$twig->parse($xmlrow);
-
-		# for debugging
-        	#$twig->print;
-
-		# grab metadata key
-		my $id = $twig->first_elt('nmwg:metadata')->{'att'}->{'id'};
-
-		# strip off "meta.".  I have no idea why it is there.
-		$id =~ s/meta\.//;
-
-		# make sure we have a src and dst
-		if(!$twig->first_elt('nmwgt:src') || !$twig->first_elt('nmwgt:dst')){
-			next;
-		}
-
-		# sometime there is a bogus row where the source is the destination.  not useful.
-		if ($twig->first_elt('nmwgt:src')->{'att'}->{'value'} eq $twig->first_elt('nmwgt:dst')->{'att'}->{'value'}) {
-			next;
-		} else {
-			# build datastructure
-			$$endpoint{$id}{'srctype'} = $twig->first_elt('nmwgt:src')->{'att'}->{'type'};
-			$$endpoint{$id}{'srcval'}  = $twig->first_elt('nmwgt:src')->{'att'}->{'value'};
-			$$endpoint{$id}{'dsttype'} = $twig->first_elt('nmwgt:dst')->{'att'}->{'type'};
-			$$endpoint{$id}{'dstval'}  = $twig->first_elt('nmwgt:dst')->{'att'}->{'value'};
-		}
-
-	}
-
-}
 
 #===============================================================================
 #                       GetTracerouteDataFromEsmond
