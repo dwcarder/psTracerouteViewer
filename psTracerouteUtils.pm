@@ -65,7 +65,6 @@ sub GetTracerouteMetadata($$$$);
 sub GetTracerouteMetadataFromESmond($$$$);
 sub ParseTracerouteMetadataAnswer($$);
 sub GetTracerouteDataFromEsmond($$$$$);
-sub ConvertXMLtoHash($$);
 sub DeduplicateTracerouteData($$);
 
 
@@ -282,7 +281,10 @@ sub GetTracerouteDataFromEsmond($$$$$) {
 	            if($hop->{success}){
 	                #print ",ip=" . $hop->{ip} . ",rtt=" . $hop->{rtt} . ",mtu=" . $hop->{mtu} . "\n";
 
-					$$results{$d->ts}{$hop->{ttl}}{$hop->{ip}} = $hop->{mtu};
+					$$results{$d->ts}{$hop->{ttl}}{$hop->{ip}} = {
+					    'mtu' => $hop->{mtu},
+					    'rtt' =>  $hop->{rtt},
+					};
 	            }else{
 					if (defined($hop->{error_message})) {
 						$$results{$d->ts}{$hop->{ttl}}{$hop->{error_message}} = 1;
@@ -293,42 +295,6 @@ sub GetTracerouteDataFromEsmond($$$$$) {
 	        }
 	    }
 	return('');
-}
-
-
-#===============================================================================
-#                      ConvertXMLtoHash 
-#
-#     arg[0]: datastructure containing xml to parse
-#     arg[1]: hash ref datastructure to fill
-#
-sub ConvertXMLtoHash($$) {
-
-	my $xmlresult = shift;
-	my $topology = shift;
-
-	#print Dumper($xmlresult->{"data"});
-
-	# each row is a timestamp
-        foreach my $xmlrow (@{$xmlresult->{"data"}}) {
-
-		# parse xml into a datastructure
-		my $parsed_xml = XMLin($xmlrow, 
-    			ForceArray => 1, 
-    			KeyAttr	   => 0
-  		);
-
-		#print Dumper($parsed_xml);
-		#my @arr = $$parsed_xml{'traceroute:datum'};
-		#print Dumper(@arr);
-
-		foreach my $hashref ( @{$$parsed_xml{'traceroute:datum'}} ) {
-			#print "\n\nROW\n";
-			#print Dumper($hashref);
-
-			$$topology{$$hashref{'timeValue'}}{$$hashref{'ttl'}}{$$hashref{'hop'}} = 1;
-		}
-	}
 }
 
 
