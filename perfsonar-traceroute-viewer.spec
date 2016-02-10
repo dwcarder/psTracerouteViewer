@@ -27,8 +27,6 @@ Requires:		perl(Exporter)
 Requires:		perl(POSIX)
 Requires:		perl(Socket)
 Requires:		perl(Socket6)
-Requires:		perl(XML::Simple)
-Requires:		perl(XML::Twig)
 Requires:		httpd
 Requires:		libperfsonar-esmond-perl
 Obsoletes:		perl-perfSONAR_PS-Toolkit
