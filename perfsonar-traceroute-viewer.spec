@@ -13,7 +13,7 @@ Summary:		perfSONAR Traceroute Viewer
 License:		Distributable, see LICENSE
 Group:			Development/Libraries
 URL:			http://www.perfsonar.net
-Source0:		perfsonar-graphs-%{version}.%{relnum}.tar.gz
+Source0:		perfsonar-traceroute-viewer-%{version}.%{relnum}.tar.gz
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:		noarch
 Requires:		perl
@@ -70,6 +70,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,perfsonar,perfsonar,-)
 %{web_base}/*
+%attr(0755,perfsonar,perfsonar) %{web_base}/index.cgi
 %{lib_base}/*
 /etc/httpd/conf.d/%{apacheconf}
 
