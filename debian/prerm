@@ -18,18 +18,8 @@ set -e
 
 
 case "$1" in
-    remove)
-        # reload apache
+    remove|upgrade|deconfigure)
         a2disconf --quiet apache-perfsonar-traceroute-viewer
-        if which invoke-rc.d > /dev/null; then
-            invoke-rc.d apache2 reload
-        else
-            /etc/init.d/apache2 reload
-        fi
-    ;;
-
-    upgrade|deconfigure)
-    ;;
 
     failed-upgrade)
     ;;
