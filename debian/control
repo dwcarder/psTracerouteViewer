@@ -12,8 +12,8 @@ Package: perfsonar-traceroute-viewer
 Architecture: all
 Depends: apache2-mpm-worker | httpd, perl, perfsonar-common,
  libperfsonar-esmond-perl, libdata-validate-ip-perl,
- libdate-manip-perl, libsocket6-perl, libdatetime-timezone-perl,
- ${misc:Depends}
+ libdate-manip-perl, libsocket6-perl, libdatetime-perl,
+ libdatetime-timezone-perl, ${misc:Depends}
 Description: perfSONAR Traceroute Viewer
  perfSONAR Traceroute Viewer (psTracerouteViewer) is a library and cgi for viewing
  traceroute data stored in perfSONAR.
