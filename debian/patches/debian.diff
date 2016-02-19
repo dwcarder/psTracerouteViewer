@@ -1,0 +1,15 @@
+--- a/apache-perfsonar-traceroute-viewer.conf
++++ b/apache-perfsonar-traceroute-viewer.conf
+@@ -1,10 +1,9 @@
+ Alias /perfsonar-traceroute-viewer /usr/lib/perfsonar/traceroute-viewer
+ <Directory "/usr/lib/perfsonar/traceroute-viewer">
+-    Options FollowSymLinks MultiViews +ExecCGI
++    Options +FollowSymLinks +MultiViews +ExecCGI
+     DirectoryIndex index.cgi
+     AddHandler cgi-script .cgi
+     AllowOverride None
+-    Order allow,deny
+-    Allow from all
++    Require all granted
+ </Directory>
+ 

@@ -1,0 +1,52 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: perfsonar-traceroute-viewer
+Source: https://github.com/perfsonar/psTracerouteViewer
+
+Files: *
+Copyright: 2014 Dale W. Carder <dwcarder@wisc.edu>
+License: Artistic-2.0
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of the "Artistic License".
+ .
+ THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+ WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES
+ OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ .
+ The complete text of the Artistic License can be found in
+ http://www.perlfoundation.org/artistic_license_2_0
+
+Files: jscalendar/*
+Copyright: 2005 Mihai Bazon <mihai_bazon@yahoo.com>
+License: LGPL
+ This package is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundationa.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the complete text of the GNU Lesser General
+ Public License can be found in "/usr/share/common-licenses/LGPL".
+
+Files: debian/*
+Copyright: 2016 Valentin Vidic <Valentin.Vidic@CARNet.hr>
+License: Apache-2.0
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ .
+ http://www.apache.org/licenses/LICENSE-2.0
+ .
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ .
+ On Debian systems, the complete text of the Apache version 2.0 license
+ can be found in "/usr/share/common-licenses/Apache-2.0".
