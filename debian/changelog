@@ -1,5 +1,5 @@
-perfsonar-traceroute-viewer (3.5.1~1.rc1-1) UNRELEASED; urgency=low
+perfsonar-traceroute-viewer (3.5.1~1.rc1-1) perfsonar-jessie-staging; urgency=low
 
   * Initial release.
 
- -- Valentin Vidic <Valentin.Vidic@CARNet.hr>  Tue, 02 Feb 2016 21:19:32 +0000
+ -- Valentin Vidic <Valentin.Vidic@CARNet.hr>  Mon, 22 Feb 2016 21:24:37 +0000
