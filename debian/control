@@ -3,7 +3,7 @@ Section: net
 Priority: optional
 Maintainer: Valentin Vidic <Valentin.Vidic@CARNet.hr>
 Build-Depends: debhelper (>= 9.0.0)
-Standards-Version: 3.9.3
+Standards-Version: 3.9.6
 Homepage: http://www.perfsonar.net/
 Vcs-Git: git://github.com/perfsonar/psTracerouteViewer
 Vcs-Browser: https://github.com/perfsonar/psTracerouteViewer
@@ -14,6 +14,6 @@ Depends: apache2-mpm-worker | httpd, perl, perfsonar-common,
  libperfsonar-esmond-perl, libdata-validate-ip-perl,
  libdate-manip-perl, libsocket6-perl, libdatetime-perl,
  libdatetime-timezone-perl, ${misc:Depends}
-Description: perfSONAR Traceroute Viewer
- perfSONAR Traceroute Viewer (psTracerouteViewer) is a library and cgi for viewing
- traceroute data stored in perfSONAR.
+Description: viewer for traceroute measurements
+ psTracerouteViewer is a library and a cgi script for viewing traceroute data
+ stored in perfSONAR measurement archive.
