@@ -27,6 +27,7 @@ case "$1" in
         else
             /etc/init.d/apache2 reload
         fi
+    ;;
 
     failed-upgrade)
     ;;
