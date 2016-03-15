@@ -1,3 +1,11 @@
+perfsonar-traceroute-viewer (3.5.1-2) perfsonar-jessie-release; urgency=low
+
+  * Fix prerm syntax
+  * Update license details
+  * Update package description
+
+ -- Valentin Vidic <Valentin.Vidic@CARNet.hr>  Tue, 15 Mar 2016 10:11:53 +0100
+
 perfsonar-traceroute-viewer (3.5.1-1) perfsonar-jessie-release; urgency=low
 
   * Initial release.
