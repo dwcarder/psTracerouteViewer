@@ -1,3 +1,10 @@
+perfsonar-traceroute-viewer (3.5.1.1j-1) UNRELEASED; urgency=low
+
+  * Removed apache configuration patch that is merged upstream.
+  * TO BE FILLED IN...
+
+ -- Antoine Delvaux <adelvaux@man.poznan.pl>  Mon, 16 May 2016 16:14:21 +0000
+
 perfsonar-traceroute-viewer (3.5.1-2) perfsonar-jessie-release; urgency=low
 
   * Fix prerm syntax
