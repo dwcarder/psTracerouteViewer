@@ -8,7 +8,7 @@
 
 Name:			perfsonar-traceroute-viewer
 Version:		3.5.1
-Release:		%{relnum}
+Release:		%{relnum}%{?dist}
 Summary:		perfSONAR Traceroute Viewer
 License:		Distributable, see LICENSE
 Group:			Development/Libraries
