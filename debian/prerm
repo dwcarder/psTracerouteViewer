@@ -19,13 +19,11 @@ set -e
 
 case "$1" in
     remove|upgrade|deconfigure)
-        # reconfigure apache after config file is removed
-        a2disconf --quiet apache-perfsonar-traceroute-viewer || true
+        if [ -e /usr/share/apache2/apache2-maintscript-helper ]; then
+            . /usr/share/apache2/apache2-maintscript-helper
 
-        if which invoke-rc.d > /dev/null; then
-            invoke-rc.d apache2 reload
-        else
-            /etc/init.d/apache2 reload
+            apache2_invoke disconf apache-perfsonar-traceroute-viewer
+            apache2_invoke dismod cgi
         fi
     ;;
 
