@@ -23,7 +23,6 @@ case "$1" in
             . /usr/share/apache2/apache2-maintscript-helper
 
             apache2_invoke disconf apache-perfsonar-traceroute-viewer
-            apache2_invoke dismod cgi
         fi
     ;;
 
