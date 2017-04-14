@@ -1,9 +1,9 @@
-perfsonar-traceroute-viewer (4.0~1.rc3-1) perfsonar-jessie-staging; urgency=low
+perfsonar-traceroute-viewer (4.0-1) perfsonar-jessie-release; urgency=low
 
   * New upstream version.
   * Removed apache configuration patch that is merged upstream.
 
- -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Fri, 24 Feb 2017 15:43:33 +0100
+ -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Fri, 14 Apr 2017 12:46:32 +0000
 
 perfsonar-traceroute-viewer (3.5.1-2) perfsonar-jessie-release; urgency=low
 
