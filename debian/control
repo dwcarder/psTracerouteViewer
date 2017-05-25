@@ -13,7 +13,7 @@ Architecture: all
 Depends: apache2, perl, perfsonar-common,
  libperfsonar-esmond-perl, libdata-validate-ip-perl,
  libdate-manip-perl, libsocket6-perl, libdatetime-perl,
- libdatetime-timezone-perl, ${misc:Depends}
+ libdatetime-timezone-perl, libcgi-pm-perl, ${misc:Depends}
 Description: viewer for traceroute measurements
  psTracerouteViewer is a library and a cgi script for viewing traceroute data
  stored in perfSONAR measurement archive.
