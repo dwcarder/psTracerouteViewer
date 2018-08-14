@@ -1,3 +1,9 @@
+perfsonar-traceroute-viewer (4.0.1-2) perfsonar-release; urgency=low
+
+  * Updating License information.
+
+ -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Tue, 14 Aug 2018 18:36:42 +0000
+
 perfsonar-traceroute-viewer (4.0.1-1) perfsonar-jessie-release; urgency=low
 
   * New upstream version.
