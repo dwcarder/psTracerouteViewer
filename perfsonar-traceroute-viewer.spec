@@ -4,8 +4,8 @@
 # cron/apache entries are located in the 'etc' directory
 %define apacheconf apache-perfsonar-traceroute-viewer.conf 
 
-%define perfsonar_auto_version 4.0.1
-%define perfsonar_auto_relnum 1 
+%define perfsonar_auto_version 4.2.0
+%define perfsonar_auto_relnum 0.0.a1
 
 Name:			perfsonar-traceroute-viewer
 Version:		%{perfsonar_auto_version}
