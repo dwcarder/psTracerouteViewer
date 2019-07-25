@@ -1,8 +1,8 @@
-perfsonar-traceroute-viewer (4.2.0~0-1) perfsonar-minor-snapshot; urgency=low
+perfsonar-traceroute-viewer (4.2.0~1.b1-1) perfsonar-minor-staging; urgency=low
 
   * New upstream version.
 
- -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Fri, 05 Apr 2019 17:52:46 +0000
+ -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Thu, 25 Jul 2019 18:28:13 +0000
 
 perfsonar-traceroute-viewer (4.0.1-2) perfsonar-release; urgency=low
 
