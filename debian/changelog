@@ -1,8 +1,8 @@
-perfsonar-traceroute-viewer (4.2.0~b2.1-1) perfsonar-minor-staging; urgency=low
+perfsonar-traceroute-viewer (4.2.0~5.b2-1) perfsonar-minor-staging; urgency=low
 
   * New upstream version.
 
- -- Andy Lake <andy@es.net>  Thu, 08 Aug 2019 19:08:13 +0000
+ -- Andy Lake <andy@es.net>  Fri, 09 Aug 2019 13:07:04 +0000
 
 perfsonar-traceroute-viewer (4.0.1-2) perfsonar-release; urgency=low
 
