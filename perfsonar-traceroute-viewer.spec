@@ -4,7 +4,7 @@
 # cron/apache entries are located in the 'etc' directory
 %define apacheconf apache-perfsonar-traceroute-viewer.conf 
 
-%define perfsonar_auto_version 4.1.6
+%define perfsonar_auto_version 4.2.0
 %define perfsonar_auto_relnum 1
 
 Name:			perfsonar-traceroute-viewer
@@ -37,7 +37,7 @@ The perfSONAR Traceroute Viewer (psTracerouteViewer) is a library and cgi for vi
 traceroute data stored in perfSONAR.
 
 %pre
-/usr/sbin/groupadd -r perfsonar 2> /dev/null || :
+/usr/sbin/groupadd -r -r perfsonar 2> /dev/null || :
 /usr/sbin/useradd -g perfsonar -r -s /sbin/nologin -c "perfSONAR User" -d /tmp perfsonar 2> /dev/null || :
 
 %prep

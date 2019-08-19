@@ -1,0 +1,40 @@
+perfsonar-traceroute-viewer (4.2.0-1) perfsonar-minor-staging; urgency=low
+
+  * New upstream version.
+
+ -- Andy Lake <andy@es.net>  Thu, 15 Aug 2019 01:10:53 +0000
+
+perfsonar-traceroute-viewer (4.0.1-2) perfsonar-release; urgency=low
+
+  * Updating License information.
+
+ -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Tue, 14 Aug 2018 18:36:42 +0000
+
+perfsonar-traceroute-viewer (4.0.1-1) perfsonar-jessie-release; urgency=low
+
+  * New upstream version.
+  * Add libcgi-pm-perl dependency.
+  * Enable apache mod-headers.
+
+ -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Tue, 15 Aug 2017 10:43:14 +0100
+
+perfsonar-traceroute-viewer (4.0-1) perfsonar-jessie-release; urgency=low
+
+  * New upstream version.
+  * Removed apache configuration patch that is merged upstream.
+
+ -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Fri, 14 Apr 2017 12:46:32 +0000
+
+perfsonar-traceroute-viewer (3.5.1-2) perfsonar-jessie-release; urgency=low
+
+  * Fix prerm syntax
+  * Update license details
+  * Update package description
+
+ -- Valentin Vidic <Valentin.Vidic@CARNet.hr>  Tue, 15 Mar 2016 10:11:53 +0100
+
+perfsonar-traceroute-viewer (3.5.1-1) perfsonar-jessie-release; urgency=low
+
+  * Initial release.
+
+ -- Valentin Vidic <Valentin.Vidic@CARNet.hr>  Fri, 04 Mar 2016 11:18:57 +0100

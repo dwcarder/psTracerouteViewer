@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e
+
+curl -s http://localhost/perfsonar-traceroute-viewer/ \
+  | grep -C 10 'psTracerouteViewer v2'
