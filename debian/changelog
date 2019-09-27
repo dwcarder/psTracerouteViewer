@@ -1,6 +1,13 @@
+perfsonar-traceroute-viewer (4.2.1-1) perfsonar-4.2; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Fri, 27 Sep 2019 13:17:11 -0400
+
 perfsonar-traceroute-viewer (4.2.0-1) perfsonar-minor-staging; urgency=low
 
   * New upstream version.
+  * Building on Stretch.
 
  -- Andy Lake <andy@es.net>  Thu, 15 Aug 2019 01:10:53 +0000
 
