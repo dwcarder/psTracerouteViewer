@@ -51,6 +51,7 @@ use Data::Validate::IP qw(is_ipv4 is_ipv6);
 use Data::Dumper;
 use DateTime::TimeZone;
 use POSIX qw(tzset);
+use HTML::Entities;
 
 #
 #======================================================================
@@ -297,7 +298,7 @@ sub displayTrData() {
 								  $rtt = $topology{$time}{$hopnum}{$router}{'rtt'} . 'ms' if defined $topology{$time}{$hopnum}{$router}{'rtt'};
 							  } 
 								 
-                              print "<tr><td>$hopnum $sayecmp</td><td>$name</td><td>$router</td><td>$rtt</td><td>$mtu</td></tr>\n";
+                              print "<tr><td>" . encode_entities($hopnum) . " $sayecmp</td><td>" . encode_entities($name) . "</td><td>" . encode_entities($router) . "</td><td>" . encode_entities($rtt) . "</td><td>" . encode_entities($mtu) . "</td></tr>\n";
                       }
               }
               print "</table></blockquote>";
@@ -317,7 +318,7 @@ EOM
    my %options;
 
    foreach my $id (keys %endpoint) {
-
+      $id = encode_entities($id);
       my $srchost;
       my $dsthost;
 
@@ -355,7 +356,7 @@ EOM
       # determine if something was already selected or not.
       my $selected=" ";
       if ($id eq $epselect) { $selected="selected=\"selected\""; }
-	  $options{"$srchost ---->  $dsthost"} = "<option value=\"$id\" $selected >";
+	  $options{encode_entities("$srchost ---->  $dsthost")} = "<option value=\"$id\" $selected >";
    }
 
 	foreach my $srcdst (sort keys(%options)) {
