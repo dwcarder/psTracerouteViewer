@@ -105,7 +105,7 @@ my $msg = GetTracerouteMetadata($mahost,$epoch_stime,$epoch_etime,\%endpoint);
 
 if ( scalar(keys((%endpoint))) < 1 ) {
 	unless(defined($msg)) { $msg = '&nbsp'; }
-       	print "<b><font color=\"red\">Error: No Measurement Archives available.<br>$msg</font></b>\n<br>\n";
+        print "<b><font color=\"red\">Error: No Measurement Archives available.</font></b>\n<br>\n";
 
 } else {
 
