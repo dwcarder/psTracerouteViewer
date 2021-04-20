@@ -1,9 +1,20 @@
-perfsonar-traceroute-viewer (4.3.5~a1.0-1) perfsonar-4.3-snapshot; urgency=low\n\n  * New upstream version.\n\n -- perfSONAR developers <debian@perfsonar.net>  Thu, 18 Mar 2021 19:14:02 +0000\n
 perfsonar-traceroute-viewer (4.3.4-1) perfsonar-4.3; urgency=low
 
   * New upstream version.
 
  -- perfSONAR developers <debian@perfsonar.net>  Wed, 17 Mar 2021 01:10:11 +0000
+
+perfsonar-traceroute-viewer (4.3.3-1) perfsonar-4.3; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Tue, 02 Feb 2021 16:37:27 +0000
+
+perfsonar-traceroute-viewer (4.3.2-1) perfsonar-4.3; urgency=low
+
+  * New upstream version.
+
+ -- perfSONAR developers <debian@perfsonar.net>  Wed, 18 Nov 2020 15:43:13 +0000
 
 perfsonar-traceroute-viewer (4.3.0-1) perfsonar-4.3; urgency=low
 
@@ -11,59 +22,6 @@ perfsonar-traceroute-viewer (4.3.0-1) perfsonar-4.3; urgency=low
 
  -- perfSONAR developers <debian@perfsonar.net>  Fri, 30 Oct 2020 13:51:18 +0000
 
-perfsonar-traceroute-viewer (4.2.3-1) perfsonar-4.2; urgency=low
-
-  * New upstream version.
-
- -- perfSONAR developers <debian@perfsonar.net>  Wed, 19 Feb 2020 15:38:03 +0000
-
-perfsonar-traceroute-viewer (4.2.1-1) perfsonar-4.2; urgency=low
-
-  * New upstream version.
-
- -- perfSONAR developers <debian@perfsonar.net>  Fri, 27 Sep 2019 13:17:11 -0400
-
-perfsonar-traceroute-viewer (4.2.0-1) perfsonar-minor-staging; urgency=low
-
-  * New upstream version.
-  * Building on Stretch.
-
- -- Andy Lake <andy@es.net>  Thu, 15 Aug 2019 01:10:53 +0000
-
-perfsonar-traceroute-viewer (4.0.1-2) perfsonar-release; urgency=low
-
-  * Updating License information.
-
- -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Tue, 14 Aug 2018 18:36:42 +0000
-
-perfsonar-traceroute-viewer (4.0.1-1) perfsonar-jessie-release; urgency=low
-
-  * New upstream version.
-  * Add libcgi-pm-perl dependency.
-  * Enable apache mod-headers.
-
- -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Tue, 15 Aug 2017 10:43:14 +0100
-
-perfsonar-traceroute-viewer (4.0-1) perfsonar-jessie-release; urgency=low
-
-  * New upstream version.
-  * Removed apache configuration patch that is merged upstream.
-
- -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Fri, 14 Apr 2017 12:46:32 +0000
-
-perfsonar-traceroute-viewer (3.5.1-2) perfsonar-jessie-release; urgency=low
-
-  * Fix prerm syntax
-  * Update license details
-  * Update package description
-
- -- Valentin Vidic <Valentin.Vidic@CARNet.hr>  Tue, 15 Mar 2016 10:11:53 +0100
-
-perfsonar-traceroute-viewer (3.5.1-1) perfsonar-jessie-release; urgency=low
-
-  * Initial release.
-
- -- Valentin Vidic <Valentin.Vidic@CARNet.hr>  Fri, 04 Mar 2016 11:18:57 +0100
 perfsonar-traceroute-viewer (4.2.4-1) perfsonar-4.2; urgency=low
 
   * New upstream version.
