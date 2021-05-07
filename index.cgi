@@ -47,6 +47,8 @@ use CGI::Carp qw(fatalsToBrowser);
 use Date::Manip;
 use Socket;
 use Socket6;
+use URI;
+use JSON;
 use Data::Validate::IP qw(is_ipv4 is_ipv6);
 use Data::Dumper;
 use DateTime::TimeZone;
@@ -94,7 +96,42 @@ my %dnscache;   # duh
 # print http header
 print("Content-Type: text/html;\n\n");
 
+#parse input
 parseInput();
+
+#load config and check MA against whitelist
+# uses same config as graphs so people don;t have to do this multiple places
+my $configfile = "/usr/lib/perfsonar/graphs/etc/graphs.json";
+if(-e $configfile){
+  local $/;
+  open my $fh, "<", $configfile;
+  my $configjson = <$fh>;
+  close $fh;
+  
+  my $config;
+  eval{ $config = decode_json($configjson); };
+  if($@){
+      die("Graph configuration error");
+  }
+
+  #validate potential url fields against whitelist
+  if ($config->{"url_whitelist"}) {
+    #Build whitelist hash
+    my %whitelist_map = ();
+    foreach my $wlhost(@{$config->{"url_whitelist"}}){
+        $whitelist_map{$wlhost} = 1;
+    }
+    #check against hash
+    my $ma_uri;
+    eval { $ma_uri = new URI($mahost); };
+    if($@){
+        die("mahost is not a valid URI")
+    }
+    unless($whitelist_map{$ma_uri->host}) {
+        die("URL is not in whitelist");
+    }
+  }
+}
 
 print "<input type='hidden' name='s' value='$epoch_stime'>\n";
 print "<input type='hidden' name='e' value='$epoch_etime'>\n";
