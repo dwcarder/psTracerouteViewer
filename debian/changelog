@@ -1,8 +1,8 @@
-perfsonar-traceroute-viewer (4.4.0~1.b1-1) perfsonar-4.4; urgency=low
+perfsonar-traceroute-viewer (4.4.0-1) perfsonar-4.4; urgency=low
 
   * New upstream version.
 
- -- Antoine Delvaux <antoine.delvaux@man.poznan.pl>  Thu, 20 May 2021 16:08:04 +0000
+ -- perfSONAR developers <debian@perfsonar.net>  Wed, 07 Jul 2021 15:20:01 +0000
 
 perfsonar-traceroute-viewer (4.3.4-1) perfsonar-4.3; urgency=low
 
