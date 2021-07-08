@@ -31,7 +31,7 @@
 #
 
 my $Script = 'index.cgi';
-my $Default_mahost = 'http://localhost:8086/perfSONAR_PS/services/tracerouteMA';
+my $Default_mahost = 'http://localhost/esmond/perfsonar/archive/';
 
 
 #
@@ -39,7 +39,7 @@ my $Default_mahost = 'http://localhost:8086/perfSONAR_PS/services/tracerouteMA';
 #======================================================================
 #       U S E   A N D   R E Q U I R E
 
-use lib "/opt/perfsonar_ps/toolkit/lib";
+use lib "/usr/lib/perfsonar/lib";
 use strict;
 use psTracerouteUtils 2.0;
 use CGI qw(:standard);
@@ -47,10 +47,13 @@ use CGI::Carp qw(fatalsToBrowser);
 use Date::Manip;
 use Socket;
 use Socket6;
+use URI;
+use JSON;
 use Data::Validate::IP qw(is_ipv4 is_ipv6);
 use Data::Dumper;
 use DateTime::TimeZone;
 use POSIX qw(tzset);
+use HTML::Entities;
 
 #
 #======================================================================
@@ -93,7 +96,42 @@ my %dnscache;   # duh
 # print http header
 print("Content-Type: text/html;\n\n");
 
+#parse input
 parseInput();
+
+#load config and check MA against whitelist
+# uses same config as graphs so people don;t have to do this multiple places
+my $configfile = "/usr/lib/perfsonar/graphs/etc/graphs.json";
+if(-e $configfile){
+  local $/;
+  open my $fh, "<", $configfile;
+  my $configjson = <$fh>;
+  close $fh;
+  
+  my $config;
+  eval{ $config = decode_json($configjson); };
+  if($@){
+      die("Graph configuration error");
+  }
+
+  #validate potential url fields against whitelist
+  if ($config->{"url_whitelist"}) {
+    #Build whitelist hash
+    my %whitelist_map = ();
+    foreach my $wlhost(@{$config->{"url_whitelist"}}){
+        $whitelist_map{$wlhost} = 1;
+    }
+    #check against hash
+    my $ma_uri;
+    eval { $ma_uri = new URI($mahost); };
+    if($@){
+        die("mahost is not a valid URI")
+    }
+    unless($whitelist_map{$ma_uri->host}) {
+        die("URL is not in whitelist");
+    }
+  }
+}
 
 print "<input type='hidden' name='s' value='$epoch_stime'>\n";
 print "<input type='hidden' name='e' value='$epoch_etime'>\n";
@@ -104,7 +142,7 @@ my $msg = GetTracerouteMetadata($mahost,$epoch_stime,$epoch_etime,\%endpoint);
 
 if ( scalar(keys((%endpoint))) < 1 ) {
 	unless(defined($msg)) { $msg = '&nbsp'; }
-       	print "<b><font color=\"red\">Error: No Measurement Archives available.<br>$msg</font></b>\n<br>\n";
+        print "<b><font color=\"red\">Error: No Measurement Archives available.</font></b>\n<br>\n";
 
 } else {
 
@@ -278,7 +316,7 @@ sub displayTrData() {
               print "\n\n<h3>Topology beginning at $humantime (" . utcOffset($ENV{'TZ'}) .")</h3><blockquote>\n";
 	      print "<input type='hidden' name='t' value='$time'>\n";
               print "<table border=1 cellspacing=0 cellpadding=3>\n";
-              print "<tr><th>Hop</th><th>Router</th><th>IP</th><th>MTU</th></tr>\n";
+              print "<tr><th>Hop</th><th>Router</th><th>IP</th><th>Delay</th><th>MTU</th></tr>\n";
               foreach my $hopnum (sort { $a <=> $b } keys %{$topology{$time}} ) {
                       my $sayecmp=" ";
                       foreach my $router (keys %{$topology{$time}{$hopnum}}) {
@@ -289,13 +327,15 @@ sub displayTrData() {
                                       $name = lookup($router); 
                               }
 							  
-						      # handle MTU
+						      # handle RTT and MTU
 							  my $mtu = '&nbsp;';
+							  my $rtt = '&nbsp;';
 							  if (defined($topology{$time}{$hopnum}{$router}) && $topology{$time}{$hopnum}{$router} != 1){
-								  $mtu = $topology{$time}{$hopnum}{$router};
+								  $mtu = $topology{$time}{$hopnum}{$router}{'mtu'} if defined $topology{$time}{$hopnum}{$router}{'mtu'};
+								  $rtt = $topology{$time}{$hopnum}{$router}{'rtt'} . 'ms' if defined $topology{$time}{$hopnum}{$router}{'rtt'};
 							  } 
 								 
-                              print "<tr><td>$hopnum $sayecmp</td><td>$name</td><td>$router</td><td>$mtu</td></tr>\n";
+                              print "<tr><td>" . encode_entities($hopnum) . " $sayecmp</td><td>" . encode_entities($name) . "</td><td>" . encode_entities($router) . "</td><td>" . encode_entities($rtt) . "</td><td>" . encode_entities($mtu) . "</td></tr>\n";
                       }
               }
               print "</table></blockquote>";
@@ -315,7 +355,7 @@ EOM
    my %options;
 
    foreach my $id (keys %endpoint) {
-
+      $id = encode_entities($id);
       my $srchost;
       my $dsthost;
 
@@ -353,7 +393,7 @@ EOM
       # determine if something was already selected or not.
       my $selected=" ";
       if ($id eq $epselect) { $selected="selected=\"selected\""; }
-	  $options{"$srchost ---->  $dsthost"} = "<option value=\"$id\" $selected >";
+	  $options{encode_entities("$srchost ---->  $dsthost")} = "<option value=\"$id\" $selected >";
    }
 
 	foreach my $srcdst (sort keys(%options)) {

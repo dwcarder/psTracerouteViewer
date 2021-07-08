@@ -29,24 +29,11 @@ package psTracerouteUtils;
 #=====================================================
 use warnings;
 use strict;
-use lib '/opt/perfsonar_ps/traceroute_ma/lib';
-use perfSONAR_PS::Client::MA;
+use lib '/usr/lib/perfsonar/lib';
 use Exporter;                           # easy perl module functions
-use XML::Twig;
-use XML::Simple qw(:strict);
 use Data::Dumper;
 use Data::Validate::IP qw(is_ipv4 is_ipv6);
 use perfSONAR_PS::Client::Esmond::ApiConnect;
-
-#======================================================================
-#    B E G I N   C O N F I G U R A T I O N   S E C T I O N
-
-# 'XML::SAX::ExpatXS is technically optional, but performance will tank without it.
-# Do this: sudo yum install expat-devel; sudo cpan -i XML::SAX::ExpatXS
-local $ENV{XML_SIMPLE_PREFERRED_PARSER} = 'XML::SAX::ExpatXS';
-
-#      E N D   C O N F I G U R A T I O N   S E C T I O N
-#======================================================================
 
 
 #=====================================================
@@ -63,12 +50,8 @@ our $VERSION = 2.0;		# 2.0 adds esmond support
 #=====================================================
 sub GetTracerouteData($$$$$);
 sub GetTracerouteMetadata($$$$);
-sub GetTracerouteMetadataFromMA($$$);
 sub GetTracerouteMetadataFromESmond($$$$);
-sub ParseTracerouteMetadataAnswer($$);
-sub GetTracerouteDataFromMA($$$$);
 sub GetTracerouteDataFromEsmond($$$$$);
-sub ConvertXMLtoHash($$);
 sub DeduplicateTracerouteData($$);
 
 
@@ -94,20 +77,9 @@ sub GetTracerouteMetadata($$$$) {
 	my $stime = shift;
 	my $etime = shift;
 	my $endpoint = shift;
-
-	# old-school perfsonar SOAP measurement archive
-	if ($url =~ m/:8086\//) {
-		my $ma_result = GetTracerouteMetadataFromMA($url,$stime,$etime);
-		ParseTracerouteMetadataAnswer($ma_result,$endpoint);
-		return('');
-
-	# new-school esmond REST measurement archive
-	} elsif ($url =~ m/esmond/) {
-		return(GetTracerouteMetadataFromESmond($url,$stime,$etime,$endpoint));
-
-	} else {
-		return("Unsure what kind of measurement archive this is.");
-	}
+    
+    #Currently only one type of MA, but could select from multiple in future
+	return(GetTracerouteMetadataFromESmond($url,$stime,$etime,$endpoint));
 }
 
 
@@ -129,67 +101,10 @@ sub GetTracerouteData($$$$$) {
 	my $stime = shift;
 	my $etime = shift;
 	my $topology = shift;
-
-	# new-school esmond REST measurement archive
-	if ($ma =~ m/esmond/) {
-		return(GetTracerouteDataFromEsmond($url,$ma,$stime,$etime,$topology));
-
-	# old-school perfsonar SOAP measurement archive
-	} else {
-		my $trdata = GetTracerouteDataFromMA($url,$ma,$stime,$etime);
-		ConvertXMLtoHash($trdata,$topology);
-		return('');
-	}
+    
+    #Currently only one type of MA, but could select from multiple in future
+	return(GetTracerouteDataFromEsmond($url,$ma,$stime,$etime,$topology));
 }
-
-
-
-
-
-#===============================================================================
-#                       GetTracerouteMetadataFromMA
-#
-#  Arguments:
-#     arg[0]: full url of the tracerouteMA 
-#     arg[1]: start time to query (unix time)
-#     arg[2]: end time to query (unix time)
-#
-#  Returns: 
-#     a hash of arrays with the xml responses  (yuck!)
-#
-sub GetTracerouteMetadataFromMA($$$) {
-
-        my $ma_host = shift;    
-        my $start_time = shift;
-        my $end_time = shift;
-
-        my $ma = new perfSONAR_PS::Client::MA( { instance => $ma_host } );
-
-        # Define subject.  I have no idea what this does, but it sure does look important.
-        my $subject = "<trace:subject xmlns:trace=\"http://ggf.org/ns/nmwg/tools/traceroute/2.0\" id=\"subject\">\n";
-        $subject .= "     <nmwgt:endPointPair xmlns:nmwgt=\"http://ggf.org/ns/nmwg/topology/2.0/\">\n";
-        $subject .= "     </nmwgt:endPointPair>\n";
-        $subject .=   "</trace:subject>\n";
-
-        # Set eventType
-        my @eventTypes = ("http://ggf.org/ns/nmwg/tools/traceroute/2.0");
-
-        my $result = $ma->metadataKeyRequest(
-                        {
-                                start     => $start_time,
-                                end             => $end_time,
-                                subject => $subject,
-                                eventTypes => \@eventTypes
-                        }
-                );
-        if(not defined $result){
-                die("Cannot connect to MA.\n");
-        }
-
-        return($result);
-
-} # end GetTracerouteMetadataFromMA
-
 
 #===============================================================================
 #                       GetTracerouteMetadataFromEsmond
@@ -254,109 +169,6 @@ sub GetTracerouteMetadataFromESmond($$$$) {
 } # end GetTracerouteMetadataFromEsmond
 
 
-#===============================================================================
-#                       ParseTracerouteMetadataAnswer
-#
-#	Parses the xml results from the metadata query and builds
-#	a hash of hash datastrcuture summarizing the results, indexed
-#	by metadata key.
-#
-#  Arguments:
-#     arg[0]: a hash of arrays containing the xml metadata responses
-#     arg[1]: a hash reference to fill with endpoint information
-#
-#  Returns: 
-#
-#
-sub ParseTracerouteMetadataAnswer($$) {
-
-	my $xmlresult = shift;
-	my $endpoint = shift;
-
-	# each row is a set of source-dest traceroute pairs
-        foreach my $xmlrow (@{$xmlresult->{"metadata"}}) {
-
-		# parse xml
-        	my $twig = XML::Twig->new(pretty_print => 'indented');
-		$twig->parse($xmlrow);
-
-		# for debugging
-        	#$twig->print;
-
-		# grab metadata key
-		my $id = $twig->first_elt('nmwg:metadata')->{'att'}->{'id'};
-
-		# strip off "meta.".  I have no idea why it is there.
-		$id =~ s/meta\.//;
-
-		# make sure we have a src and dst
-		if(!$twig->first_elt('nmwgt:src') || !$twig->first_elt('nmwgt:dst')){
-			next;
-		}
-
-		# sometime there is a bogus row where the source is the destination.  not useful.
-		if ($twig->first_elt('nmwgt:src')->{'att'}->{'value'} eq $twig->first_elt('nmwgt:dst')->{'att'}->{'value'}) {
-			next;
-		} else {
-			# build datastructure
-			$$endpoint{$id}{'srctype'} = $twig->first_elt('nmwgt:src')->{'att'}->{'type'};
-			$$endpoint{$id}{'srcval'}  = $twig->first_elt('nmwgt:src')->{'att'}->{'value'};
-			$$endpoint{$id}{'dsttype'} = $twig->first_elt('nmwgt:dst')->{'att'}->{'type'};
-			$$endpoint{$id}{'dstval'}  = $twig->first_elt('nmwgt:dst')->{'att'}->{'value'};
-		}
-
-	}
-
-}
-
-
-#===============================================================================
-#                       GetTracerouteDataFromMA
-#
-#  Arguments:
-#     arg[0]: host url of measurement archive
-#     arg[1]: id key to the data
-#     arg[2]: start time to query (unix time)
-#     arg[3]: end time to query (unix time)
-#
-#  Returns: 
-#     a hash of arrays with the xml responses
-#
-sub GetTracerouteDataFromMA($$$$) {
-
-        my $ma_host = shift;    
-	my $metadata_id = shift;
-        my $start_time = shift;
-        my $end_time = shift;
-
-        my $ma = new perfSONAR_PS::Client::MA( { instance => $ma_host } );
-
-        # ask for this key's stuff to be returned.
-	my $subject = "<nmwg:key id=\"key1\">\n";
-	$subject .= "  <nmwg:parameters id=\"key1\">\n";
-	$subject .= "    <nmwg:parameter name=\"maKey\">$metadata_id</nmwg:parameter>\n";
-	$subject .= "  </nmwg:parameters>\n";
-	$subject .= "</nmwg:key>\n";
-
-
-        # Set eventType
-        my @eventTypes = ("http://ggf.org/ns/nmwg/tools/traceroute/2.0");
-
-        my $result = $ma->setupDataRequest(
-                        {
-                                start     => $start_time,
-                                end             => $end_time,
-                                subject => $subject,
-                                eventTypes => \@eventTypes
-                        }
-                );
-        if(not defined $result){
-                die("Cannot connect to MA.\n");
-        }
-
-        return($result);
-
-}
 
 #===============================================================================
 #                       GetTracerouteDataFromEsmond
@@ -402,7 +214,10 @@ sub GetTracerouteDataFromEsmond($$$$$) {
 	            if($hop->{success}){
 	                #print ",ip=" . $hop->{ip} . ",rtt=" . $hop->{rtt} . ",mtu=" . $hop->{mtu} . "\n";
 
-					$$results{$d->ts}{$hop->{ttl}}{$hop->{ip}} = $hop->{mtu};
+					$$results{$d->ts}{$hop->{ttl}}{$hop->{ip}} = {
+					    'mtu' => $hop->{mtu},
+					    'rtt' =>  $hop->{rtt},
+					};
 	            }else{
 					if (defined($hop->{error_message})) {
 						$$results{$d->ts}{$hop->{ttl}}{$hop->{error_message}} = 1;
@@ -413,42 +228,6 @@ sub GetTracerouteDataFromEsmond($$$$$) {
 	        }
 	    }
 	return('');
-}
-
-
-#===============================================================================
-#                      ConvertXMLtoHash 
-#
-#     arg[0]: datastructure containing xml to parse
-#     arg[1]: hash ref datastructure to fill
-#
-sub ConvertXMLtoHash($$) {
-
-	my $xmlresult = shift;
-	my $topology = shift;
-
-	#print Dumper($xmlresult->{"data"});
-
-	# each row is a timestamp
-        foreach my $xmlrow (@{$xmlresult->{"data"}}) {
-
-		# parse xml into a datastructure
-		my $parsed_xml = XMLin($xmlrow, 
-    			ForceArray => 1, 
-    			KeyAttr	   => 0
-  		);
-
-		#print Dumper($parsed_xml);
-		#my @arr = $$parsed_xml{'traceroute:datum'};
-		#print Dumper(@arr);
-
-		foreach my $hashref ( @{$$parsed_xml{'traceroute:datum'}} ) {
-			#print "\n\nROW\n";
-			#print Dumper($hashref);
-
-			$$topology{$$hashref{'timeValue'}}{$$hashref{'ttl'}}{$$hashref{'hop'}} = 1;
-		}
-	}
 }
 
 
