@@ -2,9 +2,8 @@ Source: perfsonar-traceroute-viewer
 Section: net
 Priority: optional
 Maintainer: perfSONAR developers <debian@perfsonar.net>
-Uploaders: Antoine Delvaux <antoine.delvaux@man.poznan.pl>,
- Valentin Vidic <Valentin.Vidic@CARNet.hr>
-Build-Depends: debhelper (>= 9.0.0)
+Uploaders: Antoine Delvaux <antoine.delvaux@man.poznan.pl>
+Build-Depends: debhelper (>= 10)
 Standards-Version: 3.9.8
 Homepage: http://www.perfsonar.net/
 Vcs-Git: git://github.com/perfsonar/psTracerouteViewer
@@ -12,7 +11,7 @@ Vcs-Browser: https://github.com/perfsonar/psTracerouteViewer
 
 Package: perfsonar-traceroute-viewer
 Architecture: all
-Depends: apache2, perl, perfsonar-common,
+Depends: apache2, ${perl:Depends}, perfsonar-common,
  libperfsonar-esmond-perl, libdata-validate-ip-perl,
  libdate-manip-perl, libsocket6-perl, libdatetime-perl,
  libdatetime-timezone-perl, libcgi-pm-perl, ${misc:Depends}
