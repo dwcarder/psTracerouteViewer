@@ -8,25 +8,5 @@ changecom()dnl
 # more information.
 #
 
-# Build dependencies
-submodules/bundles/common
-submodules/minor-packages/perl-CGI-Ajax
-submodules/minor-packages/perl-Data-Validate-Domain
-submodules/minor-packages/perl-Data-Validate-IP
-submodules/minor-packages/perl-Hash-Merge
-submodules/minor-packages/perl-IPC-DirQueue
-submodules/minor-packages/perl-JSON-Validator
-submodules/minor-packages/perl-Net-Traceroute
-ifelse(FAMILY/MAJOR,RedHat/8,submodules/minor-packages/perl-Digest-JHash)
-ifelse(FAMILY/MAJOR,RedHat/8,submodules/minor-packages/perl-Hash-MoreUtils)
-ifelse(FAMILY/MAJOR,RedHat/8,submodules/minor-packages/perl-MooX-Types-MooseLike-Numeric)
-ifelse(FAMILY/MAJOR,RedHat/8,submodules/minor-packages/perl-Log-Any)
-ifelse(FAMILY/MAJOR,RedHat/8,submodules/minor-packages/perl-Module-Mask)
-ifelse(FAMILY/MAJOR,RedHat/8,submodules/minor-packages/perl-String-RewritePrefix)
-ifelse(FAMILY/MAJOR,RedHat/8,submodules/minor-packages/perl-CHI)
-ifelse(FAMILY/MAJOR,RedHat/8,submodules/minor-packages/perl-Mo)
-
-submodules/perl-shared/libperfsonar
-
 # Build primary packages
 traceroute-viewer
