@@ -1,0 +1,6 @@
+index.cgi /usr/lib/perfsonar/traceroute-viewer/
+uwm.gif /usr/lib/perfsonar/traceroute-viewer/
+calendaricon.jpg /usr/lib/perfsonar/traceroute-viewer/
+jscalendar /usr/lib/perfsonar/traceroute-viewer/
+psTracerouteUtils.pm /usr/lib/perfsonar/lib/
+apache-perfsonar-traceroute-viewer.conf /etc/apache2/conf-available/

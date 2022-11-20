@@ -1,0 +1,5 @@
+# Uncorrect JS detection by lintian, already reported to lintian devs.
+# see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=744972
+# and https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=808756
+perfsonar-traceroute-viewer source: source-is-missing jscalendar/calendar_stripped.js*
+perfsonar-traceroute-viewer source: source-is-missing jscalendar/calendar-setup_stripped.js*
