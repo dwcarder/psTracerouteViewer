@@ -1,13 +1,12 @@
 Source: perfsonar-traceroute-viewer
-Section: net
+Section: misc
 Priority: optional
 Maintainer: perfSONAR developers <debian@perfsonar.net>
-Uploaders: Antoine Delvaux <antoine.delvaux@man.poznan.pl>
 Build-Depends: debhelper (>= 10)
 Standards-Version: 3.9.8
 Homepage: http://www.perfsonar.net/
 Vcs-Git: git://github.com/perfsonar/psTracerouteViewer
-Vcs-Browser: https://github.com/perfsonar/psTracerouteViewer
+Vcs-Browser: https://github.com/perfsonar/psTracerouteViewer/tree/master
 
 Package: perfsonar-traceroute-viewer
 Architecture: all
