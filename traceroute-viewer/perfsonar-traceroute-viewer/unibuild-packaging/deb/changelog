@@ -1,8 +1,8 @@
-perfsonar-traceroute-viewer (5.0.7~a1.0-1) perfsonar-5.0-snapshot; urgency=low
+perfsonar-traceroute-viewer (5.0.7-1) perfsonar-5.0; urgency=low
 
   * New upstream version.
 
- -- perfSONAR developers <debian@perfsonar.net>  Sat, 11 Nov 2023 06:59:37 -0500
+ -- perfSONAR developers <debian@perfsonar.net>  Fri, 08 Dec 2023 15:45:19 -0500
 
 perfsonar-traceroute-viewer (5.0.6-1) perfsonar-5.0; urgency=low
 
